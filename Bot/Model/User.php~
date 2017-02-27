@@ -1,0 +1,28 @@
+<?php
+
+namespace Bot\Model;
+
+/**
+ * @Entity
+ * @Table(name="users")
+ **/
+class User
+{
+    /**
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     **/
+    protected $id;
+
+    /**
+     * @Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @Column(type="boolean")
+     */
+    protected $status = false;
+
+}

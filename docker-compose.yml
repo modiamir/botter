@@ -1,0 +1,19 @@
+version: '2'
+services:
+    web:
+        build: ./docker/web
+        ports:
+            - 8089:80
+        depends_on:
+            - db
+        volumes:
+            - .:/var/www
+            - ./log/:/var/log/nginx
+    db:
+        image: postgres
+        volumes:
+            - ./app/data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: botter
+            POSTGRES_USER: botter
+            POSTGRES_DB: botter

@@ -1,7 +1,6 @@
 message_1:
-    path:     '/{type}/{text}'
+    path:     '/{type}/{value}'
     defaults:
         _controller: 'Bot\Controller\FrontController::indexAction'
     requirements:
-        text: "sample"
         type: "message"

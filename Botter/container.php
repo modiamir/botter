@@ -1,7 +1,16 @@
 <?php
 
+use Botter\Factory\EntityManagerFactory;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Routing\Loader\YamlFileLoader as RouteYamlFileLoader;
+
+$locator = new FileLocator(array(__DIR__ . '/../config'));
+$loader = new RouteYamlFileLoader($locator);
+$routes = $loader->load('routes.yml');
 
 $sc = new DependencyInjection\ContainerBuilder();
 $sc->register('context', 'Symfony\Component\Routing\RequestContext');
@@ -29,5 +38,14 @@ $sc->register('dispatcher', 'Symfony\Component\EventDispatcher\EventDispatcher')
 $sc->register('framework', 'Botter\Framework')
     ->setArguments(array(new Reference('dispatcher'), new Reference('resolver')))
 ;
+
+$definition = new Definition(EntityManager::class);
+$definition->setFactory(array(EntityManagerFactory::class, 'create'))->setArguments(
+    [
+        'Bot/Model',
+        true
+    ]
+);
+$sc->setDefinition('entity_manager', $definition);
 
 return $sc;

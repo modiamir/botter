@@ -3,11 +3,12 @@
 namespace Bot\Controller;
 
 use Botter\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends AbstractController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        die('asd');
+        die(var_dump($request));
     }
 }
