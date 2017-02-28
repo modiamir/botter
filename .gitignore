@@ -3,3 +3,5 @@
 /.idea/
 /app/
 /log/
+/docker/
+/docker-compose.yml
