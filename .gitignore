@@ -6,3 +6,4 @@
 /docker/
 /docker-compose.yml
 /config/parameters.yml
+/composer.lock
