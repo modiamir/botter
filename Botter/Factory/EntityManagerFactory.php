@@ -13,7 +13,6 @@ class EntityManagerFactory
     {
         $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../../".$modelDirectory), $isDevMode);
 
-        die(dump($parameterBag));
         // database configuration parameters
         $conn = array(
             'dbname' => $parameterBag->get('db_name'),
