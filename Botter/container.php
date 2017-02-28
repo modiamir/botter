@@ -1,21 +1,24 @@
 <?php
 
 use Botter\Factory\EntityManagerFactory;
+use Botter\Factory\RouteCollectionFactory;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Routing\Loader\YamlFileLoader as RouteYamlFileLoader;
-
-$locator = new FileLocator(array(__DIR__ . '/../config'));
-$loader = new RouteYamlFileLoader($locator);
-$routes = $loader->load('routes.yml');
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Config\FileLocator;
 
 $sc = new DependencyInjection\ContainerBuilder();
+
+$definition = new Definition(RouteCollection::class);
+$definition->setFactory([RouteCollectionFactory::class, 'createRouteCollection']);
+$sc->setDefinition('routes', $definition);
+
 $sc->register('context', 'Symfony\Component\Routing\RequestContext');
 $sc->register('matcher', 'Botter\BotRouteMatcher')
-    ->setArguments(array($routes, new Reference('context')))
+    ->setArguments(array(new Reference('routes'), new Reference('context')))
 ;
 $sc->register('request_stack', 'Symfony\Component\HttpFoundation\RequestStack');
 $sc->register('resolver', 'Botter\ControllerResolver')
@@ -42,10 +45,14 @@ $sc->register('framework', 'Botter\Framework')
 $definition = new Definition(EntityManager::class);
 $definition->setFactory(array(EntityManagerFactory::class, 'create'))->setArguments(
     [
+        $sc->getParameterBag(),
         'Bot/Model',
         true
     ]
 );
 $sc->setDefinition('entity_manager', $definition);
+
+$loader = new YamlFileLoader($sc, new FileLocator(__DIR__.'/../'));
+$loader->load('config/services.yml');
 
 return $sc;

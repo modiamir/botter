@@ -4,10 +4,12 @@ namespace Botter\Factory;
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
 
 class EntityManagerFactory
 {
-    public function create($modelDirectory = 'Model', $isDevMode = true)
+    public static function create(EnvPlaceholderParameterBag $parameterBag, $modelDirectory = 'Model', $isDevMode = true)
     {
         $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../../".$modelDirectory), $isDevMode);
         // or if you prefer yaml or XML
@@ -16,12 +18,12 @@ class EntityManagerFactory
 
         // database configuration parameters
         $conn = array(
-            'dbname' => 'botter',
-            'user' => 'botter',
-            'password' => 'botter',
-            'host' => 'localhost',
+            'dbname' => $parameterBag->get('db_name'),
+            'user' => $parameterBag->get('db_user'),
+            'password' => $parameterBag->get('db_pass'),
+            'host' => $parameterBag->get('db_host'),
             'driver' => 'pdo_pgsql',
-            'port' => '4321',
+            'port' => $parameterBag->get('db_port'),
         );
 
         // obtaining the entity manager
