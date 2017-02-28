@@ -5,3 +5,4 @@
 /log/
 /docker/
 /docker-compose.yml
+/config/parameters.yml

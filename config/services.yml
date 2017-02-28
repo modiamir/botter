@@ -1,7 +1,2 @@
-parameters:
-    test: "asdd"
-    db_name: botter
-    db_user: botter
-    db_pass: botter
-    db_host: localhost
-    db_port: 4321
+imports:
+    - { resource: parameters.yml }

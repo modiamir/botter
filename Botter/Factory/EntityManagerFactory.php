@@ -12,10 +12,8 @@ class EntityManagerFactory
     public static function create(EnvPlaceholderParameterBag $parameterBag, $modelDirectory = 'Model', $isDevMode = true)
     {
         $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../../".$modelDirectory), $isDevMode);
-        // or if you prefer yaml or XML
-        //$config = Setup::createXMLMetadataConfiguration(array(__DIR__."/config/xml"), $isDevMode);
-        //$config = Setup::createYAMLMetadataConfiguration(array(__DIR__."/config/yaml"), $isDevMode);
 
+        die(dump($parameterBag));
         // database configuration parameters
         $conn = array(
             'dbname' => $parameterBag->get('db_name'),
